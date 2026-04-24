@@ -93,7 +93,8 @@ npx prisma db push
 |--------|-----|
 | `OAuthSignin` / sign-in never starts | Empty or wrong `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` |
 | `redirect_uri_mismatch` | Redirect URI in Google must be exactly `{NEXTAUTH_URL}/api/auth/callback/google` for the port you use |
-| After Google, you land on `/?error=Callback` (NextAuth v4 uses this name) | Same as redirect/callback issues: the **redirect URI** in Google must be exactly `https://<your-vercel-host>/api/auth/callback/google`, `NEXTAUTH_URL` must be `https://<your-vercel-host>` (no trailing slash), and the **Web client** ID/secret in Google must be the same pair as in Vercel. |
+| `/?error=Callback` (NextAuth v4) while Google OAuth origins/redirect look correct in Cloud Console | That error is **not** `OAuthCallback`: the token step often already succeeded. Next it fails in the **app** (usually **Prisma** writing `User` / `Account` — wrong `DATABASE_URL`, no `prisma db push`, or Neon pausing). Check Vercel **Runtime logs** for `OAUTH_CALLBACK_HANDLER_ERROR`. Open **`/api/health`**: `databaseConnected` and `userModelOk` should be `true`. |
+| `/?error=OAuthCallback` | Token exchange with Google failed — redirect URI / `NEXTAUTH_URL` / `GOOGLE_CLIENT_*` (see other rows). |
 | Works on one port, not another | Add that port’s origin + redirect URI in Google, and set `NEXTAUTH_URL` to match |
 
 ## 6. Restart

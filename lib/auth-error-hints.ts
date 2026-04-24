@@ -2,11 +2,15 @@
 export const AUTH_ERROR_HINTS: Record<string, string> = {
   OAuthSignin:
     "Google sign-in could not start. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env, add the redirect URI in Google Cloud Console, and use a valid NEXTAUTH_URL (e.g. http://localhost:3000 with no trailing slash).",
-  /** NextAuth 4: generic name for OAuth response handling failure (token exchange, profile, or redirect URI). */
+  /**
+   * NextAuth 4: if you see this (not `OAuthCallback`), Google already returned — failure is usually **after** the token
+   * step: Prisma creating/linking the user, or the JWT step. Check Vercel **Runtime logs** for `OAUTH_CALLBACK_HANDLER_ERROR`.
+   * Open `/api/health`: `databaseConnected` and `userModelOk` must be true. From your machine: `npx prisma db push` with production `DATABASE_URL`.
+   */
   Callback:
-    "The Google OAuth callback failed. In Google Cloud → Credentials, add Authorized redirect URI exactly: your site origin + /api/auth/callback/google. Set Vercel NEXTAUTH_URL to that same origin (no trailing slash). Use the same OAuth client (ID + secret) as in Vercel env.",
+    "This error usually means Google succeeded but saving the sign-in in Postgres failed, or a server callback threw. Check Vercel **Logs** (search for OAUTH_CALLBACK_HANDLER_ERROR). In `/api/health` ensure databaseConnected and userModelOk are true. Apply schema to your Neon DB: `DATABASE_URL=… npx prisma db push`. (If you instead saw `OAuthCallback`, the redirect URI / token step failed — Google Cloud must list …/api/auth/callback/google.)",
   OAuthCallback:
-    "The OAuth callback failed. Usually the redirect URI in Google Cloud does not match your app (must be exactly {NEXTAUTH_URL}/api/auth/callback/google).",
+    "The token exchange with Google failed (state/PKCE or redirect). Authorized redirect URI must be exactly {NEXTAUTH_URL}/api/auth/callback/google and match NEXTAUTH_URL (no trailing slash).",
   OAuthCreateAccount:
     "Account could not be created in the database. Check DATABASE_URL and run: npx prisma db push",
   AccessDenied: "You denied access or the account is not allowed.",

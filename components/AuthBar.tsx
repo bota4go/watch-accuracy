@@ -92,6 +92,23 @@ export function AuthBar({
             {isVercel ? " and redeploy." : " and restart the dev server."}
           </p>
         )}
+        {health &&
+          health.database &&
+          health.databaseConnected === false && (
+            <p className="max-w-sm rounded border border-red-500/30 bg-red-950/30 p-2 text-left text-[10px] leading-snug text-red-200/90">
+              <strong>Database down:</strong> the server cannot connect to Postgres (<code className="text-app-in/90">/api/health</code>{" "}
+              <code className="text-app-in/90">databaseConnected: false</code>). Fix <code className="text-app-in/90">DATABASE_URL</code> in
+              Vercel, Neon project status, or SSL/network — Google sign-in will return <code className="text-app-in/90">error=Callback</code>{" "}
+              when saving the account.
+            </p>
+          )}
+        {health && health.database && health.databaseConnected && health.userModelOk === false && (
+          <p className="max-w-sm rounded border border-amber-500/30 bg-amber-950/30 p-2 text-left text-[10px] leading-snug text-amber-200/90">
+            <strong>DB schema missing:</strong> <code className="text-app-in/90">userModelOk: false</code> — run{" "}
+            <code className="text-app-in/90">npx prisma db push</code> against the <strong>same</strong> database as in Vercel, then
+            retry sign-in.
+          </p>
+        )}
         <button
           type="button"
           disabled={!canSignIn}
