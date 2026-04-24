@@ -29,6 +29,8 @@ export function AuthBar({
       }
     })();
 
+  const isVercel = typeof window !== "undefined" && window.location.hostname.endsWith(".vercel.app");
+
   if (!isAuthed) {
     return (
       <div className="flex w-full max-w-sm flex-col items-stretch gap-2 sm:max-w-none sm:items-end">
@@ -37,22 +39,52 @@ export function AuthBar({
             <span className="inline-flex items-center gap-1 font-bold">
               <AlertCircle className="h-3 w-3" /> Google OAuth
             </span>{" "}
-            Set <code className="text-cyan-200/80">GOOGLE_CLIENT_ID</code> and{" "}
-            <code className="text-cyan-200/80">GOOGLE_CLIENT_SECRET</code> in <code className="text-cyan-200/80">.env</code> — see
-            project file <code className="text-cyan-200/80">SETUP_OAUTH.md</code>
+            {isVercel ? (
+              <>
+                Add <code className="text-cyan-200/80">GOOGLE_CLIENT_ID</code> and{" "}
+                <code className="text-cyan-200/80">GOOGLE_CLIENT_SECRET</code> in the Vercel project →
+                <strong> Settings</strong> → <strong>Environment Variables</strong> (Production), name must match
+                exactly, no spaces. <strong>Redeploy</strong> after saving. For local dev, also add them to{" "}
+                <code className="text-cyan-200/80">.env</code> — see <code className="text-cyan-200/80">SETUP_OAUTH.md</code>
+              </>
+            ) : (
+              <>
+                Set <code className="text-cyan-200/80">GOOGLE_CLIENT_ID</code> and{" "}
+                <code className="text-cyan-200/80">GOOGLE_CLIENT_SECRET</code> in <code className="text-cyan-200/80">.env</code> in
+                this project folder, then restart <code className="text-cyan-200/80">npm run dev</code> — see{" "}
+                <code className="text-cyan-200/80">SETUP_OAUTH.md</code>
+              </>
+            )}
+            {!health.google && (!health.googleId || !health.googleSecret) && (
+              <span className="mt-1 block text-slate-500">
+                {!health.googleId && "Server does not see GOOGLE_CLIENT_ID. "}
+                {health.googleId && !health.googleSecret && "Server does not see GOOGLE_CLIENT_SECRET. "}
+              </span>
+            )}
           </p>
         )}
         {health && !health.nextAuth && (
           <p className="max-w-sm rounded border border-amber-500/30 bg-amber-950/30 p-2 text-left text-[10px] text-amber-200/90">
-            Set <code className="text-cyan-200/80">NEXTAUTH_SECRET</code> and{" "}
-            <code className="text-cyan-200/80">NEXTAUTH_URL</code> in <code className="text-cyan-200/80">.env</code>
+            {isVercel ? (
+              <>
+                Set <code className="text-cyan-200/80">NEXTAUTH_SECRET</code> and{" "}
+                <code className="text-cyan-200/80">NEXTAUTH_URL</code> in Vercel (Production), then redeploy.{" "}
+                <code className="text-cyan-200/80">NEXTAUTH_URL</code> must be <code className="text-cyan-200/80">https://…{window.location.host}</code> (no trailing slash).
+              </>
+            ) : (
+              <>
+                Set <code className="text-cyan-200/80">NEXTAUTH_SECRET</code> and{" "}
+                <code className="text-cyan-200/80">NEXTAUTH_URL</code> in <code className="text-cyan-200/80">.env</code>
+              </>
+            )}
           </p>
         )}
         {urlMismatch && health?.nextAuthUrl && browserOrigin && (
           <p className="max-w-sm rounded border border-fuchsia-500/30 bg-fuchsia-950/20 p-2 text-left text-[10px] text-fuchsia-200/90">
-            <strong>Port mismatch:</strong> <code className="text-cyan-200/80">NEXTAUTH_URL</code> is{" "}
-            {health.nextAuthUrl} but this tab is {browserOrigin}. Set{" "}
-            <code className="text-cyan-200/80">NEXTAUTH_URL={browserOrigin}</code> and restart the dev server.
+            <strong>URL mismatch:</strong> <code className="text-cyan-200/80">NEXTAUTH_URL</code> is{" "}
+            {health.nextAuthUrl} but this tab is {browserOrigin}. Set Vercel env{" "}
+            <code className="text-cyan-200/80">NEXTAUTH_URL={browserOrigin}</code>
+            {isVercel ? " and redeploy." : " and restart the dev server."}
           </p>
         )}
         <button

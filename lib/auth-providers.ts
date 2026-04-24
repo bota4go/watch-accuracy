@@ -1,11 +1,11 @@
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthOptions } from "next-auth";
-
-const id = process.env.GOOGLE_CLIENT_ID?.trim();
-const secret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+import { cleanEnvVar } from "./env-server";
 
 /** Google OAuth only if both vars are set — avoids empty strings causing OAuthSignin. */
 export function getAuthProviders(): NextAuthOptions["providers"] {
+  const id = cleanEnvVar(process.env.GOOGLE_CLIENT_ID);
+  const secret = cleanEnvVar(process.env.GOOGLE_CLIENT_SECRET);
   if (id && secret) {
     return [
       GoogleProvider({
@@ -20,5 +20,7 @@ export function getAuthProviders(): NextAuthOptions["providers"] {
 }
 
 export function isGoogleOAuthConfigured() {
-  return Boolean(id && secret);
+  return Boolean(
+    cleanEnvVar(process.env.GOOGLE_CLIENT_ID) && cleanEnvVar(process.env.GOOGLE_CLIENT_SECRET)
+  );
 }
