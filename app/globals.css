@@ -2,26 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --neon-cyan: #00f5ff;
+    --neon-pink: #ff2d78;
+    --navy-deep: #03040f;
+  }
+
+  body {
+    background: var(--navy-deep);
+    color: #c8d8f0;
+    font-family: "Share Tech Mono", "Courier New", monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body::after {
+    content: "";
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.1) 3px,
+      rgba(0, 0, 0, 0.1) 4px
+    );
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .glow-cyan {
+    text-shadow: 0 0 10px #00f5ff, 0 0 30px #00f5ff88;
+  }
+  .glow-pink {
+    text-shadow: 0 0 10px #ff2d78, 0 0 30px #ff2d7888;
+  }
+  .glow-border-cyan {
+    box-shadow:
+      0 0 0 1px #00f5ff44,
+      0 0 16px #00f5ff33,
+      inset 0 0 12px #00f5ff11;
   }
 }
