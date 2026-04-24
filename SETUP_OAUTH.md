@@ -25,7 +25,9 @@ Use any long random string (32+ characters), or generate one with Node: `node -e
 
 Production app: **https://bota4go-watch-accuracy.vercel.app**
 
-**Git on Vercel:** this repo’s default branch is **`master`** (there is no `origin/main` here). In Vercel → **Settings** → **Git** → set **Production Branch** to `master` (or merge into whatever branch is set there). If production branch is `main` or something that does not get your merges, the live site will stay on an old build. After fixing, run **Redeploy** on the latest commit.
+**Git on Vercel:** in **Settings** → **Git**, the **Production Branch** must be the branch you actually push to (e.g. `main` or `master`).
+
+**If production still shows only “Initial commit” or old UI:** Vercel’s **Redeploy** button rebuilds the **same Git commit** as the *current* production deployment (same source, updated settings). It does **not** pull newer commits from GitHub. To ship new code, **push a new commit** to the production branch (or merge a PR) so Vercel creates a **new** deployment with a new commit message. If nothing appears after a push, check the GitHub app’s access to the repo, or use **Deployments → …** and pick a deployment that shows your latest commit.
 
 In the Vercel project → **Settings** → **Environment Variables** (Production), set:
 
