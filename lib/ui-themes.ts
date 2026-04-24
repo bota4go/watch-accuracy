@@ -6,6 +6,7 @@ export const UI_THEME_IDS = [
   "bmw",
   "omega",
   "rolex",
+  "casio",
 ] as const;
 
 export type UiThemeId = (typeof UI_THEME_IDS)[number];
@@ -35,6 +36,7 @@ export const UI_THEME_OPTIONS: {
   { id: "bmw", label: "BMW (inspired)", blurb: "Black, silver, motorsport blue" },
   { id: "omega", label: "Omega (inspired)", blurb: "Racing red, black, tool-watch feel" },
   { id: "rolex", label: "Rolex (inspired)", blurb: "Green, gold, classic dial tones" },
+  { id: "casio", label: "Casio (inspired)", blurb: "G-Shock / digital: resin black, orange, acid yellow" },
 ];
 
 const LS_KEY = "watch-drift-ui-theme";

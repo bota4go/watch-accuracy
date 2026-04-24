@@ -41,7 +41,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  /** App UI key: neon, linux, vscode, windows, bmw, omega, rolex (see lib/ui-themes) */
+  /** App UI key: neon, linux, vscode, windows, bmw, omega, rolex, casio (see lib/ui-themes) */
   uiTheme       String    @default("neon")
   accounts      Account[]
   sessions      Session[]
