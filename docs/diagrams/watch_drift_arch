@@ -1,0 +1,22 @@
+digraph "Watch Drift" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="Watch Drift" nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	"179a2ccffaee4e3a8627045afe0979bb" [label="User (browser)" height=1.9 image="C:\Users\Sergii\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\resources/onprem/client\user.png" shape=none]
+	subgraph cluster_Vercel {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Vercel labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"6eb116af0d1a45c4bca84ee7da682185" [label="Next.js 14
+(React + API)" height=2.3 image="C:\Users\Sergii\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\resources/programming/language\nodejs.png" shape=none]
+		cee4e737b8dd4c368d54fb66f948cc14 [label="NextAuth
+(Google)" height=2.3 image="C:\Users\Sergii\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\resources/onprem/compute\server.png" shape=none]
+	}
+	"86c694c6c5d848f98c973d5dfa0cb05f" [label="Google
+Identity (OAuth 2.0)" height=2.3 image="C:\Users\Sergii\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\resources/onprem/compute\server.png" shape=none]
+	da609faec21043ccaeb460f230a0601e [label="Neon
+Postgres + Prisma" height=2.3 image="C:\Users\Sergii\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\site-packages\resources/onprem/database\postgresql.png" shape=none]
+	"179a2ccffaee4e3a8627045afe0979bb" -> "6eb116af0d1a45c4bca84ee7da682185" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"179a2ccffaee4e3a8627045afe0979bb" -> cee4e737b8dd4c368d54fb66f948cc14 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	cee4e737b8dd4c368d54fb66f948cc14 -> "86c694c6c5d848f98c973d5dfa0cb05f" [label=token dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	cee4e737b8dd4c368d54fb66f948cc14 -> "6eb116af0d1a45c4bca84ee7da682185" [label=session dir=none fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"6eb116af0d1a45c4bca84ee7da682185" -> da609faec21043ccaeb460f230a0601e [label=Prisma dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+}
