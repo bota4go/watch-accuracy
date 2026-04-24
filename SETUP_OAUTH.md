@@ -25,6 +25,8 @@ Use any long random string (32+ characters), or generate one with Node: `node -e
 
 Production app: **https://bota4go-watch-accuracy.vercel.app**
 
+**Git on Vercel:** this repo’s default branch is **`master`** (there is no `origin/main` here). In Vercel → **Settings** → **Git** → set **Production Branch** to `master` (or merge into whatever branch is set there). If production branch is `main` or something that does not get your merges, the live site will stay on an old build. After fixing, run **Redeploy** on the latest commit.
+
 In the Vercel project → **Settings** → **Environment Variables** (Production), set:
 
 | Name | Value |

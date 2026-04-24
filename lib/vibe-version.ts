@@ -4,4 +4,4 @@
  * features; **major** for breaking behavior. Keep in sync with `package.json` `version` when you
  * release.
  */
-export const VIBE_SYNC_VERSION = "1.0.1";
+export const VIBE_SYNC_VERSION = "1.0.2";
