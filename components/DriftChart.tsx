@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -11,17 +12,47 @@ import {
   ReferenceLine,
 } from "recharts";
 import type { SyncEntry } from "@/lib/types";
+import { useAppThemeOptional } from "@/components/ThemeProvider";
 
-const CYAN = "#22d3ee";
-const FUCHSIA = "#e879f9";
-const AXIS = "#64748b";
+const FALL = {
+  line: "#22d3ee",
+  dot: "#e879f9",
+  ref: "#22d3ee",
+  grid: "#64748b",
+  tipBg: "#070b1a",
+  tipBorder: "#0d1630",
+  label: "#e879f9",
+  fg: "#c8d8f0",
+};
 
 type Point = { t: number; label: string; offset: number; full: string };
 
+function readChartVars() {
+  if (typeof document === "undefined") return null;
+  const s = getComputedStyle(document.documentElement);
+  return {
+    line: s.getPropertyValue("--chart-line").trim() || FALL.line,
+    dot: s.getPropertyValue("--chart-dot").trim() || FALL.dot,
+    ref: s.getPropertyValue("--chart-ref").trim() || FALL.ref,
+    grid: s.getPropertyValue("--chart-grid").trim() || FALL.grid,
+    tipBg: s.getPropertyValue("--chart-tooltip-bg").trim() || FALL.tipBg,
+    tipBorder: s.getPropertyValue("--chart-tooltip-border").trim() || FALL.tipBorder,
+    label: s.getPropertyValue("--app-a2").trim() || FALL.label,
+    fg: s.getPropertyValue("--app-fg").trim() || FALL.fg,
+  };
+}
+
 export function DriftChart({ syncs }: { syncs: SyncEntry[] }) {
+  const theme = useAppThemeOptional();
+  const [c, setC] = useState(FALL);
+
+  useLayoutEffect(() => {
+    setC(readChartVars() ?? FALL);
+  }, [theme?.theme, theme?.ready]);
+
   if (syncs.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center rounded-lg border-2 border-[#0d1630] bg-[#070b1a]/80 text-xs tracking-widest text-slate-500">
+      <div className="flex h-64 items-center justify-center rounded-lg border-2 border-app-line bg-app-card/80 text-xs tracking-widest text-app-muted">
         NO SYNC DATA YET
       </div>
     );
@@ -39,33 +70,39 @@ export function DriftChart({ syncs }: { syncs: SyncEntry[] }) {
     })
     .sort((a, b) => a.t - b.t);
 
+  const family =
+    (typeof document !== "undefined" &&
+      getComputedStyle(document.documentElement).getPropertyValue("--app-font").trim().split(",")[0]) ||
+    "Share Tech Mono";
+  const tickFont = family.replace(/['"]/g, "");
+
   return (
     <div className="h-72 w-full min-w-0">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-          <CartesianGrid stroke={AXIS} strokeOpacity={0.2} />
+          <CartesianGrid stroke={c.grid} strokeOpacity={0.2} />
           <XAxis
             dataKey="label"
-            tick={{ fill: AXIS, fontSize: 10, fontFamily: "Share Tech Mono" }}
-            stroke={AXIS}
+            tick={{ fill: c.grid, fontSize: 10, fontFamily: tickFont }}
+            stroke={c.grid}
             strokeOpacity={0.3}
           />
           <YAxis
-            tick={{ fill: AXIS, fontSize: 10, fontFamily: "Share Tech Mono" }}
-            stroke={AXIS}
+            tick={{ fill: c.grid, fontSize: 10, fontFamily: tickFont }}
+            stroke={c.grid}
             strokeOpacity={0.3}
             width={40}
             tickFormatter={(v) => `${v}s`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#070b1a",
-              border: "1px solid #0d1630",
+              backgroundColor: c.tipBg,
+              border: `1px solid ${c.tipBorder}`,
               borderRadius: "8px",
               fontSize: 12,
-              color: "#c8d8f0",
+              color: c.fg,
             }}
-            labelStyle={{ color: FUCHSIA }}
+            labelStyle={{ color: c.label }}
             formatter={(value) => {
               const n = Number(value);
               if (Number.isNaN(n)) return ["", ""];
@@ -76,14 +113,14 @@ export function DriftChart({ syncs }: { syncs: SyncEntry[] }) {
               return pl?.payload?.full ?? "";
             }}
           />
-          <ReferenceLine y={0} stroke={CYAN} strokeOpacity={0.4} />
+          <ReferenceLine y={0} stroke={c.ref} strokeOpacity={0.4} />
           <Line
             type="monotone"
             dataKey="offset"
-            stroke={CYAN}
+            stroke={c.line}
             strokeWidth={2}
-            dot={{ fill: FUCHSIA, r: 3 }}
-            activeDot={{ r: 5, fill: FUCHSIA, stroke: CYAN }}
+            dot={{ fill: c.dot, r: 3 }}
+            activeDot={{ r: 5, fill: c.dot, stroke: c.line }}
             isAnimationActive
           />
         </LineChart>

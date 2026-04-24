@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { cn } from "@/lib/cn";
-
 /** SVG clock: 0° = 3 o'clock, so 12 o'clock = -90°. */
 function handsFromTime(timeMs: number) {
   const d = new Date(timeMs);
@@ -39,16 +38,24 @@ export function AnalogWatchFace({
     [timeMs]
   );
 
-  const stroke = tone === "cyan" ? "stroke-cyan-300" : "stroke-fuchsia-300";
-  const glow =
-    tone === "cyan" ? "drop-shadow-[0_0_4px_#00f5ff] drop-shadow-[0_0_8px_#00f5ff80]" : "drop-shadow-[0_0_4px_#e879f9] drop-shadow-[0_0_8px_#e879f980]";
-  const ring = tone === "cyan" ? "stroke-cyan-500/30" : "stroke-fuchsia-500/30";
+  const dVar = tone === "cyan" ? "var(--dial-1)" : "var(--dial-2)";
+
+  const ringColor = { stroke: tone === "cyan" ? "var(--dial-1)" : "var(--dial-2)" } as const;
+
+  const tickStroke = (major: boolean) => ({
+    stroke: major ? "var(--dial-tick)" : "var(--dial-tick-weak)",
+  });
+
+  const glowStyle = {
+    filter: `drop-shadow(0 0 6px ${dVar}) drop-shadow(0 0 10px color-mix(in srgb, ${dVar} 50%, transparent))`,
+  } as const;
 
   const ticks = Array.from({ length: 12 }, (_, i) => {
     const ang = (i / 12) * 360 - 90;
     const rad = (ang * Math.PI) / 180;
     const inner = 72;
     const outer = 82;
+    const major = i % 3 === 0;
     return (
       <line
         key={i}
@@ -56,27 +63,27 @@ export function AnalogWatchFace({
         y1={CY + inner * Math.sin(rad)}
         x2={CX + outer * Math.cos(rad)}
         y2={CY + outer * Math.sin(rad)}
-        className={i % 3 === 0 ? "stroke-cyan-200/40" : "stroke-slate-500/20"}
-        strokeWidth={i % 3 === 0 ? 2.5 : 1}
+        style={tickStroke(major)}
+        strokeWidth={major ? 2.5 : 1}
         strokeLinecap="round"
       />
     );
   });
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-2" style={glowStyle}>
       <p
         className={cn(
           "text-center text-[10px] font-bold uppercase tracking-[0.25em]",
-          tone === "cyan" ? "text-cyan-300/80" : "text-fuchsia-300/80"
+          tone === "cyan" ? "text-app-a1/85" : "text-app-a2/85"
         )}
       >
         {label}
         {subLabel && (
-          <span className="ml-1 font-normal text-slate-500 normal-case tracking-normal">{subLabel}</span>
+          <span className="ml-1 font-normal text-app-muted/90 normal-case tracking-normal">{subLabel}</span>
         )}
       </p>
-      <div className={cn("relative h-[200px] w-[200px] sm:h-[220px] sm:w-[220px]", glow)}>
+      <div className="relative h-[200px] w-[200px] sm:h-[220px] sm:w-[220px]">
         <svg
           viewBox="0 0 200 200"
           className="h-full w-full"
@@ -94,16 +101,16 @@ export function AnalogWatchFace({
             cy={CY}
             r={R}
             fill={`url(#face-${tone})`}
-            className={ring}
+            style={ringColor}
             strokeWidth={2}
+            className="opacity-90"
           />
           {ticks}
-          {/* 12, 3, 6, 9 markers (small) */}
           <text
             x={100}
             y={28}
             textAnchor="middle"
-            className="fill-slate-500/60 text-[11px] font-mono"
+            className="fill-app-muted/60 text-[11px] font-mono"
           >
             12
           </text>
@@ -111,7 +118,7 @@ export function AnalogWatchFace({
             x={180}
             y={106}
             textAnchor="middle"
-            className="fill-slate-500/60 text-[11px] font-mono"
+            className="fill-app-muted/60 text-[11px] font-mono"
           >
             3
           </text>
@@ -119,7 +126,7 @@ export function AnalogWatchFace({
             x={100}
             y={180}
             textAnchor="middle"
-            className="fill-slate-500/60 text-[11px] font-mono"
+            className="fill-app-muted/60 text-[11px] font-mono"
           >
             6
           </text>
@@ -127,7 +134,7 @@ export function AnalogWatchFace({
             x={20}
             y={106}
             textAnchor="middle"
-            className="fill-slate-500/60 text-[11px] font-mono"
+            className="fill-app-muted/60 text-[11px] font-mono"
           >
             9
           </text>
@@ -158,15 +165,22 @@ export function AnalogWatchFace({
               y1={CY}
               x2={CX + 60}
               y2={CY}
-              className={cn(stroke, "stroke-[1.5]")}
+              style={{ stroke: dVar }}
+              strokeWidth={1.5}
               strokeLinecap="round"
               transform={`rotate(${secondDeg} ${CX} ${CY})`}
             />
           )}
-          <circle cx={CX} cy={CY} r={5} className={cn(tone === "cyan" ? "fill-cyan-400" : "fill-fuchsia-400", "drop-shadow")} />
+          <circle
+            cx={CX}
+            cy={CY}
+            r={5}
+            style={{ fill: dVar }}
+            className="drop-shadow"
+          />
         </svg>
       </div>
-      <p className="font-mono text-[10px] tabular-nums text-slate-500 sm:text-xs">
+      <p className="font-mono text-[10px] tabular-nums text-app-muted sm:text-xs">
         {new Date(timeMs).toLocaleTimeString(undefined, {
           hour: "2-digit",
           minute: "2-digit",

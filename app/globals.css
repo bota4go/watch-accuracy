@@ -2,19 +2,279 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Segoe+UI&family=Share+Tech+Mono&display=swap");
 
 @layer base {
-  :root {
-    --neon-cyan: #00f5ff;
-    --neon-pink: #ff2d78;
-    --navy-deep: #03040f;
+  :root,
+  [data-ui-theme="neon"] {
+    --app-a1: #22d3ee;
+    --app-a2: #e879f9;
+    --app-fg: #c8d8f0;
+    --app-muted: #94a3b8;
+    --app-input-fg: #a5e9fc;
+    --app-body: #03040f;
+    --app-card: rgba(7, 11, 26, 0.9);
+    --app-line: #0d1630;
+    --app-dashed: rgba(34, 211, 238, 0.25);
+    --app-glow-a1: #00f5ff;
+    --app-glow-a2: #ff2d78;
+    --dial-1: #22d3ee;
+    --dial-2: #e879f9;
+    --dial-tick: rgba(34, 211, 238, 0.4);
+    --dial-tick-weak: rgba(100, 116, 139, 0.2);
+    --app-record-border: #e879f9;
+    --app-record-fg: #f5cfff;
+    --app-record-glow: rgba(232, 121, 249, 0.2);
+    --app-btn-primary-border: rgba(34, 211, 238, 0.5);
+    --app-btn-primary-fg: #a5e9fc;
+    --app-btn-nudge: rgba(34, 211, 238, 0.4);
+    --app-grad-1: rgba(100, 0, 200, 0.2);
+    --app-grad-2: rgba(0, 200, 255, 0.12);
+    --app-grid: rgba(0, 245, 255, 0.04);
+    --app-grid-color: #00f5ff;
+    --app-scanline: 0.1;
+    --app-font: "Share Tech Mono", "JetBrains Mono", ui-monospace, monospace;
+    --app-border-top: linear-gradient(90deg, transparent, #22d3ee, transparent);
+    --chart-line: #22d3ee;
+    --chart-dot: #e879f9;
+    --chart-ref: #22d3ee;
+    --chart-grid: #64748b;
+    --chart-tooltip-bg: #070b1a;
+    --chart-tooltip-border: #0d1630;
+  }
+
+  /* GNOME / Ubuntu dark feel */
+  [data-ui-theme="linux"] {
+    --app-a1: #a855f7;
+    --app-a2: #e78a2f;
+    --app-fg: #e4e1dd;
+    --app-muted: #8d7e97;
+    --app-input-fg: #d8b4fe;
+    --app-body: #1a1018;
+    --app-card: rgba(36, 32, 38, 0.92);
+    --app-line: #3d2f44;
+    --app-dashed: rgba(168, 85, 247, 0.3);
+    --app-glow-a1: #c4b5fd;
+    --app-glow-a2: #f59e0b;
+    --dial-1: #a78bfa;
+    --dial-2: #fbbf24;
+    --dial-tick: rgba(196, 181, 253, 0.45);
+    --dial-tick-weak: rgba(100, 80, 110, 0.3);
+    --app-record-border: #f59e0b;
+    --app-record-fg: #fde68a;
+    --app-record-glow: rgba(245, 158, 11, 0.15);
+    --app-btn-primary-border: rgba(168, 85, 247, 0.55);
+    --app-btn-primary-fg: #e9d5ff;
+    --app-btn-nudge: rgba(168, 85, 247, 0.4);
+    --app-grad-1: rgba(100, 40, 150, 0.25);
+    --app-grad-2: rgba(230, 120, 40, 0.1);
+    --app-grid: rgba(168, 85, 247, 0.04);
+    --app-grid-color: #a78bfa;
+    --app-scanline: 0.06;
+    --app-font: "Inter", "Ubuntu", system-ui, sans-serif;
+    --app-border-top: linear-gradient(90deg, transparent, #a78bfa, transparent);
+    --chart-line: #a78bfa;
+    --chart-dot: #fbbf24;
+    --chart-ref: #a78bfa;
+    --chart-grid: #6b5b7a;
+    --chart-tooltip-bg: #2a212e;
+    --chart-tooltip-border: #4c3f56;
+  }
+
+  /* VS Code Dark+ */
+  [data-ui-theme="vscode"] {
+    --app-a1: #4fc1ff;
+    --app-a2: #c586c0;
+    --app-fg: #d4d4d4;
+    --app-muted: #9d9d9d;
+    --app-input-fg: #4fc1ff;
+    --app-body: #1e1e1e;
+    --app-card: rgba(37, 37, 38, 0.95);
+    --app-line: #3c3c3c;
+    --app-dashed: rgba(79, 193, 255, 0.35);
+    --app-glow-a1: #4fc1ff;
+    --app-glow-a2: #c586c0;
+    --dial-1: #4fc1ff;
+    --dial-2: #c586c0;
+    --dial-tick: rgba(79, 193, 255, 0.4);
+    --dial-tick-weak: rgba(120, 120, 120, 0.25);
+    --app-record-border: #c586c0;
+    --app-record-fg: #e0c7e0;
+    --app-record-glow: rgba(197, 134, 192, 0.2);
+    --app-btn-primary-border: rgba(79, 193, 255, 0.5);
+    --app-btn-primary-fg: #9fe1ff;
+    --app-btn-nudge: rgba(79, 193, 255, 0.35);
+    --app-grad-1: rgba(79, 193, 255, 0.08);
+    --app-grad-2: rgba(197, 134, 192, 0.08);
+    --app-grid: rgba(255, 255, 255, 0.02);
+    --app-grid-color: #555;
+    --app-scanline: 0.03;
+    --app-font: "JetBrains Mono", "Cascadia Code", ui-monospace, monospace;
+    --app-border-top: linear-gradient(90deg, transparent, #4fc1ff, transparent);
+    --chart-line: #4fc1ff;
+    --chart-dot: #c586c0;
+    --chart-ref: #4fc1ff;
+    --chart-grid: #5a5a5a;
+    --chart-tooltip-bg: #252526;
+    --chart-tooltip-border: #3c3c3c;
+  }
+
+  /* Windows 11 dark */
+  [data-ui-theme="windows"] {
+    --app-a1: #4cc2ff;
+    --app-a2: #6ae4ff;
+    --app-fg: #e8e6e3;
+    --app-muted: #9aa0a6;
+    --app-input-fg: #5eb8f5;
+    --app-body: #202020;
+    --app-card: rgba(40, 40, 40, 0.92);
+    --app-line: #4a4a4a;
+    --app-dashed: rgba(0, 103, 192, 0.35);
+    --app-glow-a1: #4cc2ff;
+    --app-glow-a2: #2d8ad6;
+    --dial-1: #3eb5f7;
+    --dial-2: #1fa3e0;
+    --dial-tick: rgba(62, 181, 247, 0.4);
+    --dial-tick-weak: rgba(180, 180, 180, 0.15);
+    --app-record-border: #0067c0;
+    --app-record-fg: #8fd4ff;
+    --app-record-glow: rgba(0, 103, 192, 0.2);
+    --app-btn-primary-border: rgba(0, 120, 212, 0.5);
+    --app-btn-primary-fg: #b0deff;
+    --app-btn-nudge: rgba(0, 120, 212, 0.35);
+    --app-grad-1: rgba(0, 100, 180, 0.1);
+    --app-grad-2: rgba(0, 180, 200, 0.06);
+    --app-grid: rgba(255, 255, 255, 0.03);
+    --app-grid-color: #555;
+    --app-scanline: 0.02;
+    --app-font: "Segoe UI", "Inter", system-ui, sans-serif;
+    --app-border-top: linear-gradient(90deg, transparent, #3eb5f7, transparent);
+    --chart-line: #3eb5f7;
+    --chart-dot: #1fa3e0;
+    --chart-ref: #3eb5f7;
+    --chart-grid: #6b6b6b;
+    --chart-tooltip-bg: #2c2c2c;
+    --chart-tooltip-border: #4a4a4a;
+  }
+
+  /* BMW (inspired) */
+  [data-ui-theme="bmw"] {
+    --app-a1: #e0e0e0;
+    --app-a2: #0066b1;
+    --app-fg: #f0f0f0;
+    --app-muted: #9a9a9a;
+    --app-input-fg: #a8d4ff;
+    --app-body: #0a0a0a;
+    --app-card: rgba(20, 20, 20, 0.94);
+    --app-line: #2a2a2a;
+    --app-dashed: rgba(0, 102, 177, 0.35);
+    --app-glow-a1: #ffffff;
+    --app-glow-a2: #1e88e5;
+    --dial-1: #b0b0b0;
+    --dial-2: #0066b1;
+    --dial-tick: rgba(200, 200, 200, 0.35);
+    --dial-tick-weak: rgba(100, 100, 100, 0.25);
+    --app-record-border: #0066b1;
+    --app-record-fg: #7ec8f8;
+    --app-record-glow: rgba(0, 102, 177, 0.18);
+    --app-btn-primary-border: rgba(255, 255, 255, 0.2);
+    --app-btn-primary-fg: #ffffff;
+    --app-btn-nudge: rgba(0, 102, 177, 0.45);
+    --app-grad-1: rgba(0, 80, 160, 0.12);
+    --app-grad-2: rgba(200, 200, 200, 0.04);
+    --app-grid: rgba(255, 255, 255, 0.03);
+    --app-grid-color: #444;
+    --app-scanline: 0.04;
+    --app-font: "Inter", "Segoe UI", system-ui, sans-serif;
+    --app-border-top: linear-gradient(90deg, transparent, #0066b1, #ffffff, transparent);
+    --chart-line: #90caf9;
+    --chart-dot: #0066b1;
+    --chart-ref: #b0b0b0;
+    --chart-grid: #5a5a5a;
+    --chart-tooltip-bg: #121212;
+    --chart-tooltip-border: #2a2a2a;
+  }
+
+  /* Omega (inspired) */
+  [data-ui-theme="omega"] {
+    --app-a1: #e8e2dc;
+    --app-a2: #c00;
+    --app-fg: #e8e4df;
+    --app-muted: #8a8580;
+    --app-input-fg: #ffd4d4;
+    --app-body: #0d0d0d;
+    --app-card: rgba(24, 18, 18, 0.95);
+    --app-line: #3a2a2a;
+    --app-dashed: rgba(204, 0, 0, 0.3);
+    --app-glow-a1: #ffffff;
+    --app-glow-a2: #ff3b3b;
+    --dial-1: #c8c0b8;
+    --dial-2: #cc1a1a;
+    --dial-tick: rgba(200, 190, 180, 0.35);
+    --dial-tick-weak: rgba(100, 80, 80, 0.25);
+    --app-record-border: #cc1a1a;
+    --app-record-fg: #ffb0b0;
+    --app-record-glow: rgba(204, 0, 0, 0.2);
+    --app-btn-primary-border: rgba(204, 0, 0, 0.4);
+    --app-btn-primary-fg: #ffc4c4;
+    --app-btn-nudge: rgba(204, 0, 0, 0.3);
+    --app-grad-1: rgba(100, 0, 0, 0.15);
+    --app-grad-2: rgba(200, 200, 200, 0.04);
+    --app-grid: rgba(200, 50, 50, 0.04);
+    --app-grid-color: #822;
+    --app-scanline: 0.05;
+    --app-font: "Inter", "Georgia", serif;
+    --app-border-top: linear-gradient(90deg, transparent, #a00, transparent);
+    --chart-line: #e0a0a0;
+    --chart-dot: #cc1a1a;
+    --chart-ref: #c8c0b8;
+    --chart-grid: #6a5a5a;
+    --chart-tooltip-bg: #1a1010;
+    --chart-tooltip-border: #4a3030;
+  }
+
+  /* Rolex (inspired) */
+  [data-ui-theme="rolex"] {
+    --app-a1: #c5a000;
+    --app-a2: #1a5c3c;
+    --app-fg: #f0ebe3;
+    --app-muted: #8c9a8e;
+    --app-input-fg: #e8d78a;
+    --app-body: #0a1210;
+    --app-card: rgba(16, 32, 28, 0.94);
+    --app-line: #1a4a3a;
+    --app-dashed: rgba(26, 92, 60, 0.4);
+    --app-glow-a1: #e8c547;
+    --app-glow-a2: #2d7a4f;
+    --dial-1: #d4af37;
+    --dial-2: #1a5c3c;
+    --dial-tick: rgba(196, 168, 50, 0.4);
+    --dial-tick-weak: rgba(30, 80, 60, 0.25);
+    --app-record-border: #1a5c3c;
+    --app-record-fg: #a7e0c0;
+    --app-record-glow: rgba(26, 92, 60, 0.2);
+    --app-btn-primary-border: rgba(196, 168, 50, 0.45);
+    --app-btn-primary-fg: #f5e6a3;
+    --app-btn-nudge: rgba(26, 92, 60, 0.4);
+    --app-grad-1: rgba(26, 60, 45, 0.2);
+    --app-grad-2: rgba(200, 170, 40, 0.08);
+    --app-grid: rgba(200, 170, 50, 0.05);
+    --app-grid-color: #2a6a4a;
+    --app-scanline: 0.04;
+    --app-font: "Inter", "Georgia", serif;
+    --app-border-top: linear-gradient(90deg, transparent, #1a5c3c, #c5a000, transparent);
+    --chart-line: #d4af37;
+    --chart-dot: #1a5c3c;
+    --chart-ref: #d4af37;
+    --chart-grid: #4a6a5a;
+    --chart-tooltip-bg: #0f1e1a;
+    --chart-tooltip-border: #1a3d32;
   }
 
   body {
-    background: var(--navy-deep);
-    color: #c8d8f0;
-    font-family: "Share Tech Mono", "Courier New", monospace;
+    background: var(--app-body);
+    color: var(--app-fg);
+    font-family: var(--app-font);
   }
 
   * {
@@ -27,27 +287,51 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
+    opacity: var(--app-scanline);
     background: repeating-linear-gradient(
       to bottom,
       transparent 0px,
       transparent 3px,
-      rgba(0, 0, 0, 0.1) 3px,
-      rgba(0, 0, 0, 0.1) 4px
+      rgba(0, 0, 0, 0.45) 3px,
+      rgba(0, 0, 0, 0.45) 4px
     );
   }
 }
 
 @layer utilities {
   .glow-cyan {
-    text-shadow: 0 0 10px #00f5ff, 0 0 30px #00f5ff88;
+    text-shadow:
+      0 0 10px var(--app-glow-a1),
+      0 0 30px color-mix(in srgb, var(--app-glow-a1) 50%, transparent);
   }
   .glow-pink {
-    text-shadow: 0 0 10px #ff2d78, 0 0 30px #ff2d7888;
+    text-shadow:
+      0 0 10px var(--app-glow-a2),
+      0 0 30px color-mix(in srgb, var(--app-glow-a2) 50%, transparent);
   }
   .glow-border-cyan {
     box-shadow:
-      0 0 0 1px #00f5ff44,
-      0 0 16px #00f5ff33,
-      inset 0 0 12px #00f5ff11;
+      0 0 0 1px color-mix(in srgb, var(--app-glow-a1) 30%, transparent),
+      0 0 16px color-mix(in srgb, var(--app-glow-a1) 20%, transparent),
+      inset 0 0 12px color-mix(in srgb, var(--app-glow-a1) 8%, transparent);
+  }
+  .app-hero-grad {
+    background: radial-gradient(ellipse 80% 50% at 15% 20%, var(--app-grad-1), transparent 40%),
+      radial-gradient(ellipse 70% 50% at 85% 70%, var(--app-grad-2), transparent 40%);
+  }
+  .app-hero-grid {
+    opacity: 0.2;
+    background: linear-gradient(to right, var(--app-grid-color) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--app-grid-color) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .app-header-shine {
+    background: var(--app-border-top, linear-gradient(90deg, transparent, #22d3ee, transparent));
+  }
+  .app-offset-hero {
+    text-shadow: 0 0 20px color-mix(in srgb, var(--app-a1) 50%, transparent);
+  }
+  .app-record-cta {
+    box-shadow: 0 0 20px var(--app-record-glow, rgba(232, 121, 249, 0.2));
   }
 }
