@@ -21,6 +21,27 @@ Use any long random string (32+ characters), or generate one with Node: `node -e
 - **No trailing slash.**
 - If you change ports, update this and **restart** `npm run dev`.
 
+## 3b. Vercel production (this project)
+
+Production app: **https://bota4go-watch-accuracy.vercel.app**
+
+In the Vercel project → **Settings** → **Environment Variables** (Production), set:
+
+| Name | Value |
+|------|--------|
+| `NEXTAUTH_URL` | `https://bota4go-watch-accuracy.vercel.app` (no trailing slash) |
+| `NEXTAUTH_SECRET` | Same as local or a new random string |
+| `DATABASE_URL` | Your hosted Postgres (e.g. Neon) connection string |
+| `GOOGLE_CLIENT_ID` | From Google Cloud OAuth client |
+| `GOOGLE_CLIENT_SECRET` | From Google Cloud OAuth client |
+
+In **Google Cloud** → OAuth client (Web) add:
+
+- **Authorized JavaScript origins:** `https://bota4go-watch-accuracy.vercel.app`
+- **Authorized redirect URIs:** `https://bota4go-watch-accuracy.vercel.app/api/auth/callback/google`
+
+Redeploy after changing env. Apply DB schema: `npx prisma db push` (or migrate) using the **production** `DATABASE_URL` once.
+
 ## 4. `DATABASE_URL` (required for saving watches)
 
 Use a hosted PostgreSQL database, for example [Neon](https://neon.tech) (free tier). Create a project, copy the connection string, set `DATABASE_URL=...` in `.env`, then from the project folder run:
