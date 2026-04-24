@@ -102,6 +102,10 @@ npm run dev
 
 [SETUP_OAUTH.md](./SETUP_OAUTH.md) lists example production URLs and common OAuth mistakes (`redirect_uri_mismatch`, etc.).
 
+## App admin (optional)
+
+A single **admin email** (default `bota4go@gmail.com`) can open **`/admin`** and see all users, watches, and sync rows. Set **`ADMIN_EMAIL`** in `.env` / Vercel to use a different address. Access is enforced server-side; non-admins are redirected to `/`. JSON for scripts or tools: `GET /api/admin/overview` (same auth + email check).
+
 ## Stack
 
 - Next.js 14, TypeScript, Tailwind, framer-motion, Recharts, NextAuth, Prisma, PostgreSQL
