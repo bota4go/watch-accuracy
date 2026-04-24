@@ -11,6 +11,9 @@ export type EnvHealth = {
   googleId: boolean;
   googleSecret: boolean;
   database: boolean;
+  /** Live Postgres + Prisma; null if `database` (env) is false. Omitted on older /api/health. */
+  databaseConnected?: boolean | null;
+  userModelOk?: boolean | null;
   nextAuth: boolean;
   nextAuthUrl: string | null;
 } | null;
