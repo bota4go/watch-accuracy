@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 
 export type EnvHealth = {
   google: boolean;
+  /** Whether the server process sees a non-empty ID (for debugging Vercel vs .env). */
+  googleId: boolean;
+  googleSecret: boolean;
   database: boolean;
   nextAuth: boolean;
   nextAuthUrl: string | null;
