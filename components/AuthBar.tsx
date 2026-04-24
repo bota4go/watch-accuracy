@@ -19,7 +19,9 @@ export function AuthBar({
 }) {
   const health = useEnvHealth();
   const browserOrigin = originPortHint();
-  const canSignIn = health?.google && health?.nextAuth;
+  /** Do not block sign-in while /api/health is loading or if the request failed (health stays null). */
+  const canSignIn =
+    health == null ? true : Boolean(health.google && health.nextAuth);
   const urlMismatch =
     Boolean(health?.nextAuthUrl && browserOrigin) &&
     (() => {
@@ -93,9 +95,9 @@ export function AuthBar({
         <button
           type="button"
           disabled={!canSignIn}
-          onClick={() => signIn("google")}
+          onClick={() => void signIn("google", { callbackUrl: "/" })}
           title={!canSignIn ? "Configure .env first" : undefined}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-cyan-500/50 bg-cyan-500/10 px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-cyan-200 shadow-[0_0_16px_rgba(0,245,255,0.15)] transition enabled:hover:border-cyan-300 enabled:hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-app-btn-b bg-app-a1/10 px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-app-in shadow-[0_0_16px_color-mix(in_srgb,var(--app-a1)_20%,transparent)] transition enabled:hover:border-app-a1/60 enabled:hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Mail className="h-4 w-4" />
           Sign in with Google
