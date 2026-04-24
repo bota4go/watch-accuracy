@@ -95,7 +95,8 @@ npx prisma db push
 |--------|-----|
 | `OAuthSignin` / sign-in never starts | Empty or wrong `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` |
 | `redirect_uri_mismatch` | Redirect URI in Google must be exactly `{NEXTAUTH_URL}/api/auth/callback/google` for the port you use |
-| `/?error=Callback` (NextAuth v4) while Google OAuth origins/redirect look correct in Cloud Console | That error is **not** `OAuthCallback`: the token step often already succeeded. Next it fails in the **app** (usually **Prisma** writing `User` / `Account` — wrong `DATABASE_URL`, no `prisma db push`, or Neon pausing). Check Vercel **Runtime logs** for `OAUTH_CALLBACK_HANDLER_ERROR`. Open **`/api/health`**: `databaseConnected` and `userModelOk` should be `true`. |
+| Vercel log: `P2022` / `The column User.uiTheme does not exist` / `adapter_error_getUserByAccount` | The production database schema is **behind** the repo. Apply it to the **same** `DATABASE_URL` as Vercel: `npx prisma db push`, or run `docs/sql/add_user_uiTheme.sql` in Neon. Then `userModelOk` on `/api/health` should be `true` (we select `uiTheme` to catch this). |
+| `/?error=Callback` (NextAuth v4) while Google OAuth origins/redirect look correct in Cloud Console | Often **Prisma/adapter** after Google succeeds. Check Vercel **Runtime logs** for `OAUTH_CALLBACK_HANDLER_ERROR` or P2022. If DB schema is old, `userModelOk` may be **false** after a deploy that fixes `/api/health`. |
 | `/?error=OAuthCallback` | Token exchange with Google failed — redirect URI / `NEXTAUTH_URL` / `GOOGLE_CLIENT_*` (see other rows). |
 | Works on one port, not another | Add that port’s origin + redirect URI in Google, and set `NEXTAUTH_URL` to match |
 

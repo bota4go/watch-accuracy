@@ -7,7 +7,7 @@ export const AUTH_ERROR_HINTS: Record<string, string> = {
    * the callback URL, (2) Vercel logs, (3) Neon pooled `DATABASE_URL` for serverless.
    */
   Callback:
-    "If `/api/health` shows databaseConnected and userModelOk, the problem is not “missing table”. Next: (1) In DevTools → Network, open the first request to `/api/auth/callback/google` and read the full URL. If you see `error=access_denied` or any `error=` from Google, fix OAuth consent (test user, app verification) or use another account. (2) Vercel → Logs: search for `[next-auth]` and `OAUTH_CALLBACK_ERROR` / `OAUTH_CALLBACK_HANDLER_ERROR` to see the real message. (3) On Neon, use the *pooled* connection string and add `?pgbouncer=true&connect_timeout=15&connection_limit=1` to `DATABASE_URL` for Vercel (Prisma + serverless). (4) Set Vercel env `NEXTAUTH_DEBUG=1`, redeploy, retry, and read extended logs. Distinct from `OAuthCallback` (token/redirect step).",
+    "If Vercel logs show P2022 or `User.uiTheme` does not exist, run `npx prisma db push` against your production `DATABASE_URL` (or `docs/sql/add_user_uiTheme.sql` in Neon). If `/api/health` has `userModelOk: false` after a deploy, same fix. Otherwise: (1) Network: first `/api/auth/callback/google` URL for `error=` from Google. (2) Logs: `[next-auth]` and `OAUTH_CALLBACK_HANDLER_ERROR` for the real message. (3) Neon pooled `DATABASE_URL` for serverless. (4) `NEXTAUTH_DEBUG=1` in Vercel. Distinct from `OAuthCallback` (token/redirect).",
   OAuthCallback:
     "The token exchange with Google failed (state/PKCE or redirect). Authorized redirect URI must be exactly {NEXTAUTH_URL}/api/auth/callback/google and match NEXTAUTH_URL (no trailing slash).",
   OAuthCreateAccount:

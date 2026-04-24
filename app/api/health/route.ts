@@ -27,7 +27,8 @@ export async function GET() {
     }
     if (databaseConnected) {
       try {
-        await prisma.user.findFirst({ take: 1, select: { id: true } });
+        /* Must include columns Prisma expects for User; missing `uiTheme` breaks NextAuth (getUserByAccount). */
+        await prisma.user.findFirst({ take: 1, select: { id: true, uiTheme: true } });
         userModelOk = true;
       } catch {
         userModelOk = false;
@@ -55,7 +56,7 @@ export async function GET() {
     database,
     /** True if `SELECT 1` worked (not only a valid `DATABASE_URL` string). */
     databaseConnected: database ? databaseConnected : null,
-    /** True if the `User` model is queryable (migrations / prisma db push done). */
+    /** True if `User` row is readable with expected columns (e.g. `uiTheme`). */
     userModelOk: database ? userModelOk : null,
     nextAuth: nextAuthSecret && Boolean(nextAuthUrl),
     nextAuthUrl: nextAuthUrl || null,
