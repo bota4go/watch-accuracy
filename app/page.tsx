@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Trash2, Activity, Crosshair, Zap } from "lucide-react";
+import { AuthErrorBanner } from "@/components/AuthErrorBanner";
 import { AuthBar } from "@/components/AuthBar";
 import { ThemePicker } from "@/components/ThemePicker";
 import { AnalogWatchFace } from "@/components/AnalogWatchFace";
@@ -68,15 +69,16 @@ export default function Home() {
     });
   }, []);
 
-  if (!ready) {
-    return (
-      <div className="flex min-h-screen items-center justify-center text-app-a1 text-xs tracking-[0.3em]">
-        LOADING…
-      </div>
-    );
-  }
-
   return (
+    <>
+      <Suspense fallback={null}>
+        <AuthErrorBanner />
+      </Suspense>
+      {!ready ? (
+        <div className="flex min-h-screen items-center justify-center text-app-a1 text-xs tracking-[0.3em]">
+          LOADING…
+        </div>
+      ) : (
     <main className="relative min-h-screen overflow-x-hidden">
       <div className="pointer-events-none fixed inset-0 app-hero-grad" aria-hidden />
       <div className="pointer-events-none fixed inset-0 app-hero-grid" aria-hidden />
@@ -246,6 +248,8 @@ export default function Home() {
         )}
       </div>
     </main>
+      )}
+    </>
   );
 }
 

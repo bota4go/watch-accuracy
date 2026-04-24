@@ -93,6 +93,7 @@ npx prisma db push
 |--------|-----|
 | `OAuthSignin` / sign-in never starts | Empty or wrong `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` |
 | `redirect_uri_mismatch` | Redirect URI in Google must be exactly `{NEXTAUTH_URL}/api/auth/callback/google` for the port you use |
+| After Google, you land on `/?error=Callback` (NextAuth v4 uses this name) | Same as redirect/callback issues: the **redirect URI** in Google must be exactly `https://<your-vercel-host>/api/auth/callback/google`, `NEXTAUTH_URL` must be `https://<your-vercel-host>` (no trailing slash), and the **Web client** ID/secret in Google must be the same pair as in Vercel. |
 | Works on one port, not another | Add that port’s origin + redirect URI in Google, and set `NEXTAUTH_URL` to match |
 
 ## 6. Restart

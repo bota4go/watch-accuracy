@@ -19,13 +19,21 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user && token.sub) {
         session.user.id = token.sub;
-        const flags = await getUserSessionFlagsFromDatabase(token.sub);
-        if (flags.email) {
-          session.user.email = flags.email;
+        let email: string | null = null;
+        let isAdmin = false;
+        try {
+          const flags = await getUserSessionFlagsFromDatabase(token.sub);
+          email = flags.email;
+          isAdmin = flags.isAdmin;
+        } catch {
+          if (token.email) email = token.email as string;
+        }
+        if (email) {
+          session.user.email = email;
         } else if (token.email) {
           session.user.email = token.email as string;
         }
-        session.user.isAdmin = flags.isAdmin;
+        session.user.isAdmin = isAdmin;
       } else if (session.user) {
         session.user.isAdmin = false;
       }
