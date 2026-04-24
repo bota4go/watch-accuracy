@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 
 export type EnvHealth = {
+  /** Deployed app version (header “vibe sync”); if stale vs repo, Vercel may be on wrong branch. */
+  vibeSyncVersion?: string;
+  git?: { ref: string | null; sha: string | null } | null;
   google: boolean;
   /** Whether the server process sees a non-empty ID (for debugging Vercel vs .env). */
   googleId: boolean;

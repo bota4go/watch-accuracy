@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cleanEnvVar, isTruthyEnv } from "@/lib/env-server";
+import { VIBE_SYNC_VERSION } from "@/lib/vibe-version";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,14 @@ export function GET() {
     Boolean(nsec) && nsec.length >= 16 && !/^replace-with/i.test(nsec);
   const nextAuthUrl = cleanEnvVar(process.env.NEXTAUTH_URL);
   return NextResponse.json({
+    /** Matches header “vibe sync · v…” — if this is old, the new bundle is not what Vercel is serving. */
+    vibeSyncVersion: VIBE_SYNC_VERSION,
+    git: process.env.VERCEL
+      ? {
+          ref: process.env.VERCEL_GIT_COMMIT_REF ?? null,
+          sha: (process.env.VERCEL_GIT_COMMIT_SHA || "").slice(0, 7) || null,
+        }
+      : null,
     google: googleId && googleSecret,
     googleId,
     googleSecret,
