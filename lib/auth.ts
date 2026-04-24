@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { NextAuthOptions } from "next-auth";
 import { getAuthProviders } from "./auth-providers";
+import { isAdminEmail } from "./admin";
 import { prisma } from "./prisma";
 
 export const authOptions: NextAuthOptions = {
@@ -9,11 +10,18 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.sub = user.id;
+      if (user) {
+        token.sub = user.id;
+        token.email = user.email ?? token.email;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.sub) session.user.id = token.sub;
+      if (session.user) {
+        if (token.sub) session.user.id = token.sub;
+        if (token.email) session.user.email = token.email as string;
+        session.user.isAdmin = isAdminEmail(session.user.email);
+      }
       return session;
     },
   },
