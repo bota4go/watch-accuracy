@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Watch Drift
 
-## Getting Started
+Synthwave-styled **mechanical watch accuracy** tracker: compare your watch to “atomic” (browser) time, log drift in seconds, chart it over time. **Google sign-in** with data stored in **PostgreSQL** (e.g. [Neon](https://neon.tech)) — deployable on [Vercel](https://vercel.com).
 
-First, run the development server:
+## Architecture
+
+![Watch Drift system architecture](docs/diagrams/watch_drift_arch.svg)
+
+- **User** — browser; reads time and uses +/– to match the on-screen “your watch” dial.  
+- **Vercel** — hosts **Next.js 14** (App Router) and **NextAuth.js** (Google).  
+- **Google** — OAuth 2.0 identity; tokens handled server-side.  
+- **Neon (Postgres)** — **Prisma** stores users, watches, and sync points.
+
+### Diagram as code (Diagrams, mingrammer)
+
+A Python script using the [**diagrams**](https://diagrams.mingrammer.com) library (see [Getting started / Examples](https://diagrams.mingrammer.com/docs/getting-started/examples)) is in the repo. It can export a high-res **PNG** when [Graphviz](https://graphviz.org) is installed:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pip install -r docs/diagrams/requirements.txt
+# Windows: install Graphviz (e.g. winget install Graphviz.Graphviz) so `dot` is on PATH
+python docs/diagrams/watch_drift_arch.py
+# → docs/diagrams/watch_drift_arch.png
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The hand-maintained **SVG** above is kept so GitHub always shows a diagram even without Graphviz. Regenerate the PNG if you change `watch_drift_arch.py` and need a bitmap for docs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Full env (local + Vercel + Google): **[SETUP_OAUTH.md](./SETUP_OAUTH.md)**
 
-## Learn More
+**Quick start (local):**
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cp .env.example .env
+# fill DATABASE_URL, NEXTAUTH_*, GOOGLE_*
+npx prisma db push
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Tests:** `npm test`  
+- **Build:** `npm run build`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack
 
-## Deploy on Vercel
+- Next.js 14, TypeScript, Tailwind, framer-motion, Recharts, NextAuth, Prisma, PostgreSQL
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private / your deployment.

@@ -35,3 +35,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# architecture diagrams: extensionless graphviz intermediate
+docs/diagrams/watch_drift_arch
