@@ -44,22 +44,22 @@ export function AuthBar({
             </span>{" "}
             {isVercel ? (
               <>
-                Add <code className="text-cyan-200/80">GOOGLE_CLIENT_ID</code> and{" "}
-                <code className="text-cyan-200/80">GOOGLE_CLIENT_SECRET</code> in the Vercel project →
+                Add <code className="text-app-in/90">GOOGLE_CLIENT_ID</code> and{" "}
+                <code className="text-app-in/90">GOOGLE_CLIENT_SECRET</code> in the Vercel project →
                 <strong> Settings</strong> → <strong>Environment Variables</strong> (Production), name must match
                 exactly, no spaces. <strong>Redeploy</strong> after saving. For local dev, also add them to{" "}
-                <code className="text-cyan-200/80">.env</code> — see <code className="text-cyan-200/80">SETUP_OAUTH.md</code>
+                <code className="text-app-in/90">.env</code> — see <code className="text-app-in/90">SETUP_OAUTH.md</code>
               </>
             ) : (
               <>
-                Set <code className="text-cyan-200/80">GOOGLE_CLIENT_ID</code> and{" "}
-                <code className="text-cyan-200/80">GOOGLE_CLIENT_SECRET</code> in <code className="text-cyan-200/80">.env</code> in
-                this project folder, then restart <code className="text-cyan-200/80">npm run dev</code> — see{" "}
-                <code className="text-cyan-200/80">SETUP_OAUTH.md</code>
+                Set <code className="text-app-in/90">GOOGLE_CLIENT_ID</code> and{" "}
+                <code className="text-app-in/90">GOOGLE_CLIENT_SECRET</code> in <code className="text-app-in/90">.env</code> in
+                this project folder, then restart <code className="text-app-in/90">npm run dev</code> — see{" "}
+                <code className="text-app-in/90">SETUP_OAUTH.md</code>
               </>
             )}
             {!health.google && (!health.googleId || !health.googleSecret) && (
-              <span className="mt-1 block text-slate-500">
+              <span className="mt-1 block text-app-muted">
                 {!health.googleId && "Server does not see GOOGLE_CLIENT_ID. "}
                 {health.googleId && !health.googleSecret && "Server does not see GOOGLE_CLIENT_SECRET. "}
               </span>
@@ -70,23 +70,23 @@ export function AuthBar({
           <p className="max-w-sm rounded border border-amber-500/30 bg-amber-950/30 p-2 text-left text-[10px] text-amber-200/90">
             {isVercel ? (
               <>
-                Set <code className="text-cyan-200/80">NEXTAUTH_SECRET</code> and{" "}
-                <code className="text-cyan-200/80">NEXTAUTH_URL</code> in Vercel (Production), then redeploy.{" "}
-                <code className="text-cyan-200/80">NEXTAUTH_URL</code> must be <code className="text-cyan-200/80">https://…{window.location.host}</code> (no trailing slash).
+                Set <code className="text-app-in/90">NEXTAUTH_SECRET</code> and{" "}
+                <code className="text-app-in/90">NEXTAUTH_URL</code> in Vercel (Production), then redeploy.{" "}
+                <code className="text-app-in/90">NEXTAUTH_URL</code> must be <code className="text-app-in/90">https://…{window.location.host}</code> (no trailing slash).
               </>
             ) : (
               <>
-                Set <code className="text-cyan-200/80">NEXTAUTH_SECRET</code> and{" "}
-                <code className="text-cyan-200/80">NEXTAUTH_URL</code> in <code className="text-cyan-200/80">.env</code>
+                Set <code className="text-app-in/90">NEXTAUTH_SECRET</code> and{" "}
+                <code className="text-app-in/90">NEXTAUTH_URL</code> in <code className="text-app-in/90">.env</code>
               </>
             )}
           </p>
         )}
         {urlMismatch && health?.nextAuthUrl && browserOrigin && (
           <p className="max-w-sm rounded border border-fuchsia-500/30 bg-fuchsia-950/20 p-2 text-left text-[10px] text-fuchsia-200/90">
-            <strong>URL mismatch:</strong> <code className="text-cyan-200/80">NEXTAUTH_URL</code> is{" "}
+            <strong>URL mismatch:</strong> <code className="text-app-in/90">NEXTAUTH_URL</code> is{" "}
             {health.nextAuthUrl} but this tab is {browserOrigin}. Set Vercel env{" "}
-            <code className="text-cyan-200/80">NEXTAUTH_URL={browserOrigin}</code>
+            <code className="text-app-in/90">NEXTAUTH_URL={browserOrigin}</code>
             {isVercel ? " and redeploy." : " and restart the dev server."}
           </p>
         )}
@@ -111,18 +111,18 @@ export function AuthBar({
           <img
             src={user.image}
             alt=""
-            className="h-8 w-8 flex-shrink-0 rounded-full border border-cyan-500/40"
+            className="h-8 w-8 flex-shrink-0 rounded-full border border-app-a1/50"
             width={32}
             height={32}
             referrerPolicy="no-referrer"
           />
         )}
         <div className="min-w-0 text-right sm:text-left">
-          <p className="truncate text-sm font-bold text-cyan-200/90">
+          <p className="truncate text-sm font-bold text-app-in/90">
             {user?.name || user?.email}
           </p>
           {user?.email && user?.name && (
-            <p className="truncate text-[10px] text-slate-500">{user.email}</p>
+            <p className="truncate text-[10px] text-app-muted">{user.email}</p>
           )}
         </div>
       </div>
@@ -139,7 +139,7 @@ export function AuthBar({
         <button
           type="button"
           onClick={() => signOut()}
-          className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-600/80 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 transition hover:border-slate-500 hover:text-slate-200"
+          className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-app-line/90 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-app-muted transition hover:border-app-a1/40 hover:text-app-fg"
         >
           <LogOut className="h-3.5 w-3.5" />
           Sign out
