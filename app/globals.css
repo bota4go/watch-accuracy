@@ -271,6 +271,44 @@
     --chart-tooltip-border: #1a3d32;
   }
 
+  /* Casio (inspired) — G-Shock / Pro Trek digital feel */
+  [data-ui-theme="casio"] {
+    --app-a1: #ff6b00;
+    --app-a2: #facc15;
+    --app-fg: #e8e6e3;
+    --app-muted: #7c7a78;
+    --app-input-fg: #ffb366;
+    --app-body: #0c0c0c;
+    --app-card: rgba(24, 24, 24, 0.96);
+    --app-line: #2d2b28;
+    --app-dashed: rgba(255, 107, 0, 0.35);
+    --app-glow-a1: #ff8c33;
+    --app-glow-a2: #fde047;
+    --dial-1: #ff6b00;
+    --dial-2: #facc15;
+    --dial-tick: rgba(255, 140, 50, 0.45);
+    --dial-tick-weak: rgba(80, 80, 75, 0.35);
+    --app-record-border: #facc15;
+    --app-record-fg: #fef9c3;
+    --app-record-glow: rgba(250, 204, 21, 0.2);
+    --app-btn-primary-border: rgba(255, 107, 0, 0.5);
+    --app-btn-primary-fg: #ffe4cc;
+    --app-btn-nudge: rgba(255, 107, 0, 0.4);
+    --app-grad-1: rgba(200, 80, 0, 0.18);
+    --app-grad-2: rgba(250, 200, 20, 0.1);
+    --app-grid: rgba(255, 100, 0, 0.04);
+    --app-grid-color: #4a3a2a;
+    --app-scanline: 0.04;
+    --app-font: "JetBrains Mono", "Share Tech Mono", ui-monospace, monospace;
+    --app-border-top: linear-gradient(90deg, transparent, #ff6b00, #facc15, transparent);
+    --chart-line: #ff6b00;
+    --chart-dot: #facc15;
+    --chart-ref: #ff6b00;
+    --chart-grid: #5c5a58;
+    --chart-tooltip-bg: #141210;
+    --chart-tooltip-border: #3a3530;
+  }
+
   body {
     background: var(--app-body);
     color: var(--app-fg);
