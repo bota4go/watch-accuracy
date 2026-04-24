@@ -7,6 +7,15 @@ export async function isAdminInDatabase(userId: string): Promise<boolean> {
   return isAdminEmail(u?.email);
 }
 
+/** One read for session: canonical email + admin (JWT alone can miss email for `isAdmin`). */
+export async function getUserSessionFlagsFromDatabase(userId: string) {
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
+  return {
+    email: u?.email ?? null,
+    isAdmin: isAdminEmail(u?.email),
+  };
+}
+
 /** All app users with watches and syncs (oldest-to-newest syncs per watch). */
 export function getAllUsersWithWatches() {
   return prisma.user.findMany({
