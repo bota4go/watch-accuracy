@@ -7,7 +7,9 @@
 from __future__ import annotations
 
 import os
+import sys
 
+from graphviz.backend.execute import ExecutableNotFound
 from diagrams import Cluster, Diagram, Edge
 from diagrams.onprem.client import User
 from diagrams.onprem.compute import Server
@@ -47,9 +49,21 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ExecutableNotFound:
+        print(
+            "Graphviz is not installed or 'dot' is not on your PATH.\n"
+            "  Windows: winget install --id Graphviz.Graphviz\n"
+            "  Or: https://graphviz.org/download/  (add the bin folder to PATH)\n"
+            "  Open a new terminal, then:  dot -V",
+            file=sys.stderr,
+        )
+        raise SystemExit(1) from None
+
     out = os.path.join(_HERE, "watch_drift_arch.png")
     if os.path.isfile(out):
         print("Wrote", out)
     else:
-        print("Expected", out, "- check Graphviz (dot) is on PATH")
+        print("Expected", out, "- check Graphviz (dot) is on PATH", file=sys.stderr)
+        raise SystemExit(1)

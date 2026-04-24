@@ -10,8 +10,8 @@
     </marker>
   </defs>
   <rect width="100%" height="100%" fill="url(#bg)"/>
-  <text x="24" y="36" fill="#22d3ee" font-size="16" font-weight="bold">Watch Drift  system architecture</text>
-  <text x="24" y="58" fill="#64748b" font-size="11">Next.js 14 ù NextAuth ù Google OAuth ù Prisma ù Neon (Postgres)</text>
+  <text x="24" y="36" fill="#22d3ee" font-size="16" font-weight="bold">Watch Drift - system architecture</text>
+  <text x="24" y="58" fill="#64748b" font-size="11">Next.js 14, NextAuth, Google OAuth, Prisma, Neon (Postgres)</text>
   <!-- User -->
   <rect x="32" y="120" width="100" height="64" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
   <text x="82" y="150" text-anchor="middle" fill="#e2e8f0" font-weight="600">User</text>
@@ -26,7 +26,7 @@
   <text x="420" y="155" text-anchor="middle" fill="#e2e8f0" font-weight="600">NextAuth</text>
   <text x="420" y="175" text-anchor="middle" fill="#94a3b8" font-size="10">Google provider</text>
   <rect x="260" y="222" width="200" height="50" rx="6" fill="#0f172a" stroke="#64748b" stroke-width="1"/>
-  <text x="360" y="242" text-anchor="middle" fill="#cbd5e1" font-size="10">Prisma ORM ù API / watches / syncs</text>
+  <text x="360" y="242" text-anchor="middle" fill="#cbd5e1" font-size="10">Prisma ORM - API / watches / syncs</text>
   <text x="360" y="260" text-anchor="middle" fill="#64748b" font-size="9">(session cookie)</text>
   <!-- Google -->
   <rect x="600" y="100" width="120" height="100" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.2"/>
@@ -43,5 +43,5 @@
   <path d="M 280 200 L 350 220" fill="none" stroke="#22d3ee" stroke-width="0.8"/>
   <path d="M 400 200 L 370 222" fill="none" stroke="#c084fc" stroke-width="0.8" stroke-dasharray="3 2"/>
   <path d="M 360 250 L 520 256 L 600 256" fill="none" stroke="#336791" stroke-width="1.2" marker-end="url(#arr)"/>
-  <text x="24" y="300" fill="#475569" font-size="9">Regenerate high-res graph (optional): install Graphviz + pip install diagrams, then: python docs/diagrams/watch_drift_arch.py  see https://diagrams.mingrammer.com/docs/getting-started/examples</text>
+  <text x="24" y="300" fill="#475569" font-size="9">Regenerate high-res graph: install Graphviz, pip install -r docs/diagrams/requirements.txt, then python docs/diagrams/watch_drift_arch.py. See https://diagrams.mingrammer.com/docs/getting-started/examples</text>
 </svg>
