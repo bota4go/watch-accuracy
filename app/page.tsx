@@ -21,6 +21,11 @@ import {
 } from "@/lib/drift-math";
 import type { WatchRecord } from "@/lib/types";
 import { VIBE_SYNC_VERSION } from "@/lib/vibe-version";
+import {
+  matchWatchBrands,
+  WATCH_BRAND_QUICK_PICKS,
+  WATCH_BRAND_SUGGESTIONS,
+} from "@/lib/watch-brand-suggestions";
 
 export default function Home() {
   const {
@@ -59,6 +64,11 @@ export default function Home() {
   const meanAbs = meanAbsDailyDriftSec(samples);
   const meanSign = meanDailyDriftSec(samples);
   const hint = selected ? daysBetweenSyncsHint(selected.syncs) : null;
+
+  const brandMatches = useMemo(
+    () => matchWatchBrands(nameInput, 8),
+    [nameInput]
+  );
 
   const nudge = useCallback((d: number) => {
     setOffset((o) => {
@@ -132,39 +142,85 @@ export default function Home() {
         <section className="grid gap-4 sm:grid-cols-[1fr_280px]">
           <div className="rounded-xl border-2 border-app-line bg-app-card p-4 sm:p-5">
             <label className="text-[10px] uppercase tracking-[0.28em] text-app-muted">New watch</label>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <div className="relative min-w-[12rem] flex-1">
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-app-a1/50">&gt;</span>
-                <input
-                  className="h-10 w-full rounded-lg border-2 border-app-line/80 bg-app-body/50 pl-6 pr-2 text-sm text-app-in outline-none placeholder:text-app-muted/70 focus:border-app-a1/50"
-                  placeholder="Seiko, Rolex, G-Shock…"
-                  value={nameInput}
-                  onChange={(e) => setNameInput(e.target.value)}
-                  onKeyDown={async (e) => {
-                    if (e.key === "Enter" && nameInput.trim()) {
-                      e.preventDefault();
-                      const id = await registerWatch(nameInput);
-                      setNameInput("");
-                      setSelectedId(id);
-                      setOffset(0);
-                    }
+            <div className="mt-2 space-y-2">
+              <div className="flex flex-wrap gap-2">
+                <div className="relative min-w-[12rem] flex-1">
+                  <span className="absolute left-2 top-1/2 -translate-y-1/2 text-app-a1/50">&gt;</span>
+                  <input
+                    className="h-10 w-full rounded-lg border-2 border-app-line/80 bg-app-body/50 pl-6 pr-2 text-sm text-app-in outline-none placeholder:text-app-muted/70 focus:border-app-a1/50"
+                    placeholder="Type a brand and pick a suggestion, or your own name…"
+                    value={nameInput}
+                    onChange={(e) => setNameInput(e.target.value)}
+                    list="watch-brand-suggestions"
+                    name="watchBrand"
+                    autoComplete="off"
+                    aria-label="Watch brand or name"
+                    onKeyDown={async (e) => {
+                      if (e.key === "Enter" && nameInput.trim()) {
+                        e.preventDefault();
+                        const id = await registerWatch(nameInput);
+                        setNameInput("");
+                        setSelectedId(id);
+                        setOffset(0);
+                      }
+                    }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  disabled={!nameInput.trim()}
+                  onClick={async () => {
+                    if (!nameInput.trim()) return;
+                    const id = await registerWatch(nameInput);
+                    setNameInput("");
+                    setSelectedId(id);
+                    setOffset(0);
                   }}
-                />
+                  className="h-10 rounded-lg border-2 border-app-btn-b bg-app-a1/10 px-4 text-xs font-bold uppercase tracking-widest text-app-btn-fg shadow-[0_0_14px_color-mix(in_srgb,var(--app-a1)_20%,transparent)] enabled:hover:bg-app-a1/20 disabled:opacity-30"
+                >
+                  Register
+                </button>
               </div>
-              <button
-                type="button"
-                disabled={!nameInput.trim()}
-                onClick={async () => {
-                  if (!nameInput.trim()) return;
-                  const id = await registerWatch(nameInput);
-                  setNameInput("");
-                  setSelectedId(id);
-                  setOffset(0);
-                }}
-                className="h-10 rounded-lg border-2 border-app-btn-b bg-app-a1/10 px-4 text-xs font-bold uppercase tracking-widest text-app-btn-fg shadow-[0_0_14px_color-mix(in_srgb,var(--app-a1)_20%,transparent)] enabled:hover:bg-app-a1/20 disabled:opacity-30"
-              >
-                Register
-              </button>
+              {nameInput.trim() === "" ? (
+                <div>
+                  <p className="mb-1.5 text-[9px] uppercase tracking-widest text-app-muted">Quick picks</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {WATCH_BRAND_QUICK_PICKS.map((b) => (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => setNameInput(b)}
+                        className="rounded-md border border-app-line/50 bg-app-body/60 px-2 py-0.5 text-[11px] text-app-muted transition hover:border-app-a1/35 hover:text-app-in/90"
+                      >
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                brandMatches.length > 0 && (
+                  <div>
+                    <p className="mb-1.5 text-[9px] uppercase tracking-widest text-app-muted">Matching brands</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {brandMatches.map((b) => (
+                        <button
+                          key={b}
+                          type="button"
+                          onClick={() => setNameInput(b)}
+                          className="rounded-md border border-app-line/50 bg-app-body/60 px-2 py-0.5 text-[11px] text-app-in/80 transition hover:border-app-a1/35"
+                        >
+                          {b}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )
+              )}
+              <datalist id="watch-brand-suggestions">
+                {WATCH_BRAND_SUGGESTIONS.map((b) => (
+                  <option key={b} value={b} />
+                ))}
+              </datalist>
             </div>
           </div>
 
