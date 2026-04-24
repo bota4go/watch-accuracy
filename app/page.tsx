@@ -19,6 +19,7 @@ import {
   meanDailyDriftSec,
 } from "@/lib/drift-math";
 import type { WatchRecord } from "@/lib/types";
+import { VIBE_SYNC_VERSION } from "@/lib/vibe-version";
 
 export default function Home() {
   const {
@@ -85,7 +86,9 @@ export default function Home() {
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px app-header-shine" />
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-[0.35em] text-app-a1/70">vibe sync · v1.0</p>
+              <p className="text-[10px] uppercase tracking-[0.35em] text-app-a1/70">
+                vibe sync · v{VIBE_SYNC_VERSION}
+              </p>
               <h1 className="mt-1 text-4xl font-black tracking-tight sm:text-5xl">
                 <span className="text-app-a1 glow-cyan">WATCH</span>
                 <span className="text-app-a2 glow-pink">DRIFT</span>
