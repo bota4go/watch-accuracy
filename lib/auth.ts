@@ -1,7 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { NextAuthOptions } from "next-auth";
 import { getAuthProviders } from "./auth-providers";
-import { isAdminEmail } from "./admin";
+import { getUserSessionFlagsFromDatabase } from "./admin-db";
 import { prisma } from "./prisma";
 
 export const authOptions: NextAuthOptions = {
@@ -14,28 +14,20 @@ export const authOptions: NextAuthOptions = {
         token.sub = user.id;
         token.email = user.email ?? token.email;
       }
-      // Legacy / edge: JWT may lack `email` even when the user row has it. Backfill once so
-      // `isAdmin` and the Admin link work without forcing sign-out.
-      if (token.sub && !token.email) {
-        const u = await prisma.user.findUnique({
-          where: { id: token.sub as string },
-          select: { email: true },
-        });
-        if (u?.email) {
-          token.email = u.email;
-        }
-      }
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        if (token.sub) {
-          session.user.id = token.sub;
-        }
-        if (token.email) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+        const flags = await getUserSessionFlagsFromDatabase(token.sub);
+        if (flags.email) {
+          session.user.email = flags.email;
+        } else if (token.email) {
           session.user.email = token.email as string;
         }
-        session.user.isAdmin = isAdminEmail(session.user.email);
+        session.user.isAdmin = flags.isAdmin;
+      } else if (session.user) {
+        session.user.isAdmin = false;
       }
       return session;
     },
