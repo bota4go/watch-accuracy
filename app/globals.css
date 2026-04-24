@@ -315,6 +315,13 @@
     font-family: var(--app-font);
   }
 
+  /* Windows/Chrome: native <select> can get OS white background + our light --app-fg → white-on-white */
+  .app-theme-select,
+  .app-theme-select option {
+    background-color: var(--app-card);
+    color: var(--app-fg);
+  }
+
   * {
     box-sizing: border-box;
   }
