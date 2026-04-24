@@ -3,12 +3,11 @@ export const AUTH_ERROR_HINTS: Record<string, string> = {
   OAuthSignin:
     "Google sign-in could not start. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env, add the redirect URI in Google Cloud Console, and use a valid NEXTAUTH_URL (e.g. http://localhost:3000 with no trailing slash).",
   /**
-   * NextAuth 4: if you see this (not `OAuthCallback`), Google already returned — failure is usually **after** the token
-   * step: Prisma creating/linking the user, or the JWT step. Check Vercel **Runtime logs** for `OAUTH_CALLBACK_HANDLER_ERROR`.
-   * Open `/api/health`: `databaseConnected` and `userModelOk` must be true. From your machine: `npx prisma db push` with production `DATABASE_URL`.
+   * NextAuth 4 uses this name for several failures. If `/api/health` is all green, check (1) Google’s query on
+   * the callback URL, (2) Vercel logs, (3) Neon pooled `DATABASE_URL` for serverless.
    */
   Callback:
-    "This error usually means Google succeeded but saving the sign-in in Postgres failed, or a server callback threw. Check Vercel **Logs** (search for OAUTH_CALLBACK_HANDLER_ERROR). In `/api/health` ensure databaseConnected and userModelOk are true. Apply schema to your Neon DB: `DATABASE_URL=… npx prisma db push`. (If you instead saw `OAuthCallback`, the redirect URI / token step failed — Google Cloud must list …/api/auth/callback/google.)",
+    "If `/api/health` shows databaseConnected and userModelOk, the problem is not “missing table”. Next: (1) In DevTools → Network, open the first request to `/api/auth/callback/google` and read the full URL. If you see `error=access_denied` or any `error=` from Google, fix OAuth consent (test user, app verification) or use another account. (2) Vercel → Logs: search for `[next-auth]` and `OAUTH_CALLBACK_ERROR` / `OAUTH_CALLBACK_HANDLER_ERROR` to see the real message. (3) On Neon, use the *pooled* connection string and add `?pgbouncer=true&connect_timeout=15&connection_limit=1` to `DATABASE_URL` for Vercel (Prisma + serverless). (4) Set Vercel env `NEXTAUTH_DEBUG=1`, redeploy, retry, and read extended logs. Distinct from `OAuthCallback` (token/redirect step).",
   OAuthCallback:
     "The token exchange with Google failed (state/PKCE or redirect). Authorized redirect URI must be exactly {NEXTAUTH_URL}/api/auth/callback/google and match NEXTAUTH_URL (no trailing slash).",
   OAuthCreateAccount:

@@ -2,19 +2,27 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import type { NextAuthOptions } from "next-auth";
 import { getAuthProviders } from "./auth-providers";
 import { getUserSessionFlagsFromDatabase } from "./admin-db";
+import { cleanEnvVar } from "./env-server";
 import { prisma } from "./prisma";
 
 export const authOptions: NextAuthOptions = {
+  /** Set `NEXTAUTH_DEBUG=1` in Vercel to log full NextAuth traces (troubleshoot `error=Callback`). */
+  debug: cleanEnvVar(process.env.NEXTAUTH_DEBUG) === "1",
   adapter: PrismaAdapter(prisma),
   providers: getAuthProviders(),
   session: { strategy: "jwt" },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.sub = user.id;
-        token.email = user.email ?? token.email;
+      try {
+        if (user) {
+          if (user.id != null) token.sub = String(user.id);
+          token.email = user.email ?? token.email;
+        }
+        return token;
+      } catch (e) {
+        console.error("[auth] jwt callback", e);
+        return token;
       }
-      return token;
     },
     async session({ session, token }) {
       if (session.user && token.sub) {

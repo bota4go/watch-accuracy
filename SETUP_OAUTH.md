@@ -54,6 +54,8 @@ Use a hosted PostgreSQL database, for example [Neon](https://neon.tech) (free ti
 npx prisma db push
 ```
 
+**Vercel + Neon (recommended):** use the **pooled** connection string from the Neon dashboard (or add `?pgbouncer=true` to the connect args Prisma documents). For many serverless setups, append query params such as `&connect_timeout=15&connection_limit=1` so sign-in *writes* (not only `/api/health` reads) do not fail with `error=Callback`. If `databaseConnected` is true but sign-in still fails, check Vercel function logs and set **`NEXTAUTH_DEBUG=1`** in Vercel (redeploy) for verbose NextAuth output.
+
 ## 5. Google OAuth (required for “Sign in with Google”)
 
 ### 5.1 Google Cloud project
